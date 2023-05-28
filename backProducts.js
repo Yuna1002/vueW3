@@ -9,7 +9,9 @@ const app = {
       products: [],
       productModal: {},
       delProductModal: {},
-      tempProduct: {}, //Modal裡的資料
+      tempProduct: {
+        imagesUrl: [],
+      }, //Modal裡的資料
       isNew: true, //modal裡的確認鍵是新增/編輯
     };
   },
@@ -87,6 +89,10 @@ const app = {
         .catch((err) => {
           console.log(err);
         });
+    },
+    createImages() {
+      this.tempProduct.imagesUrl = [];
+      this.tempProduct.imagesUrl.push("");
     },
   },
   mounted() {

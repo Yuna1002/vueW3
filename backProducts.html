@@ -90,30 +90,67 @@
             <div class="modal-body">
               <div class="row">
                 <div class="col-sm-4">
-                  <div class="mb-2">
+                  <div class="mb-5">
+                    <h4>主圖</h4>
                     <div class="mb-3">
-                      <label for="imageUrl" class="form-label"
-                        >輸入圖片網址</label
-                      >
                       <input
                         type="text"
                         class="form-control"
                         placeholder="請輸入圖片連結"
+                        v-model="tempProduct.imageUrl"
                       />
                     </div>
-                    <img class="img-fluid" src="" alt="" />
+                    <img
+                      class="img-fluid"
+                      :src="tempProduct.imageUrl"
+                      alt="tempProduct.title"
+                    />
                   </div>
+                  <!-- 多圖新增 -->
                   <div>
-                    <button
-                      class="btn btn-outline-primary btn-sm d-block w-100"
-                    >
-                      新增圖片
-                    </button>
-                  </div>
-                  <div v-else>
-                    <button class="btn btn-outline-danger btn-sm d-block w-100">
-                      刪除圖片
-                    </button>
+                    <h4 class="mb-3">多圖新增</h4>
+                    <!-- 判斷tempProduct.imagesUrl是一個陣列(有值)，是的話顯示 -->
+                    <div v-if="Array.isArray(tempProduct.imagesUrl)">
+                      <template
+                        v-for="(img,key) in tempProduct.imagesUrl"
+                        :key="key"
+                      >
+                        <label class="form-label"
+                          ><strong>{{`圖片${key+1}`}}</strong></label
+                        >
+                        <input
+                          type="text"
+                          v-model="tempProduct.imagesUrl[key]"
+                          class="form-control"
+                          placeholder="請輸入圖片網址"
+                        />
+                        <img class="img-fluid mb-4" :src="img" alt="" />
+                      </template>
+                      <!-- v-if＝images是空(沒有長度)的或欄位有值時-->
+                      <button
+                        v-if="!tempProduct.imagesUrl.length || tempProduct.imagesUrl[tempProduct.imagesUrl.length - 1]"
+                        class="btn btn-outline-primary btn-sm d-block w-100"
+                        @click="tempProduct.imagesUrl.push('')"
+                      >
+                        (內層)新增圖片
+                      </button>
+                      <button
+                        v-else
+                        class="btn btn-outline-danger btn-sm d-block w-100"
+                        @click="tempProduct.imagesUrl.pop('')"
+                      >
+                        刪除圖片
+                      </button>
+                    </div>
+                    <!-- 外層按鈕 -->
+                    <div v-else>
+                      <button
+                        class="btn btn-outline-primary btn-sm d-block w-100"
+                        @click="createImages"
+                      >
+                        (外層)新增圖片
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div class="col-sm-8">
