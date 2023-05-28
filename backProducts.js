@@ -10,6 +10,7 @@ const app = {
       productModal: {},
       delProductModal: {},
       tempProduct: {}, //Modal裡的資料
+      isNew: true, //modal裡的確認鍵是新增/編輯
     };
   },
   methods: {
@@ -38,14 +39,54 @@ const app = {
     openModal(state, item) {
       if (state === "new") {
         this.tempProduct = {};
+        this.isNew = true;
         this.productModal.show();
       } else if (state === "edit") {
         this.tempProduct = { ...item };
+        this.isNew = false;
         this.productModal.show();
       } else if (state === "del") {
         this.tempProduct = { ...item };
         this.delProductModal.show();
       }
+    },
+    addProduct() {
+      const data = this.tempProduct;
+      axios
+        .post(`${url}/api/${path}/admin/product`, { data })
+        .then((res) => {
+          alert(res.data.message);
+          this.productModal.hide();
+          this.getProducts();
+        })
+        .catch((err) => {
+          console.log(err.data.message);
+        });
+    },
+    editProduct(id) {
+      const data = this.tempProduct;
+      axios
+        .put(`${url}/api/${path}/admin/product/${id}`, { data })
+        .then((res) => {
+          alert(res.data.message);
+          this.productModal.hide();
+          this.getProducts();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    delProduct(id) {
+      axios
+        .delete(`${url}/api/${path}/admin/product/${id}`)
+        .then((res) => {
+          alert(res.data.message);
+          this.delProductModal.hide();
+          this.getProducts();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   mounted() {
