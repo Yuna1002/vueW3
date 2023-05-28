@@ -1,9 +1,15 @@
 const url = "https://vue3-course-api.hexschool.io/v2";
 const path = "yuna1002";
+// let productModal = {};
+// let delProductModal = {};
+
 const app = {
   data() {
     return {
       products: [],
+      productModal: {},
+      delProductModal: {},
+      tempProduct: {}, //Modal裡的資料
     };
   },
   methods: {
@@ -29,8 +35,27 @@ const app = {
           alert(err.data.message);
         });
     },
+    openModal(state, item) {
+      if (state === "new") {
+        this.tempProduct = {};
+        this.productModal.show();
+      } else if (state === "edit") {
+        this.tempProduct = { ...item };
+        this.productModal.show();
+      } else if (state === "del") {
+        this.tempProduct = { ...item };
+        this.delProductModal.show();
+      }
+    },
   },
   mounted() {
+    //modal實體化
+    this.productModal = new bootstrap.Modal(
+      document.getElementById("productModal")
+    );
+    this.delProductModal = new bootstrap.Modal(
+      document.getElementById("delProductModal")
+    );
     //從cookie取出token
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)yunaToken\s*\=\s*([^;]*).*$)|^.*$/,

@@ -17,7 +17,9 @@
     <div id="app">
       <div class="container">
         <div class="text-end mt-4">
-          <button class="btn btn-primary">建立新的產品</button>
+          <button class="btn btn-primary" @click="openModal('new')">
+            建立新的產品
+          </button>
         </div>
         <table class="table mt-4">
           <thead>
@@ -42,10 +44,18 @@
               </td>
               <td>
                 <div class="btn-group">
-                  <button type="button" class="btn btn-outline-primary btn-sm">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-sm"
+                    @click="openModal('edit',product)"
+                  >
                     編輯
                   </button>
-                  <button type="button" class="btn btn-outline-danger btn-sm">
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-sm"
+                    @click="openModal('del',product)"
+                  >
                     刪除
                   </button>
                 </div>
@@ -55,6 +65,7 @@
         </table>
       </div>
       <!-- Modal -->
+      <!-- 新增/編輯Modal -->
       <div
         id="productModal"
         ref="productModal"
@@ -113,6 +124,7 @@
                       type="text"
                       class="form-control"
                       placeholder="請輸入標題"
+                      v-model="tempProduct.title"
                     />
                   </div>
 
@@ -124,6 +136,7 @@
                         type="text"
                         class="form-control"
                         placeholder="請輸入分類"
+                        v-model="tempProduct.category"
                       />
                     </div>
                     <div class="mb-3 col-md-6">
@@ -133,6 +146,7 @@
                         type="text"
                         class="form-control"
                         placeholder="請輸入單位"
+                        v-model="tempProduct.unit"
                       />
                     </div>
                   </div>
@@ -146,6 +160,7 @@
                         min="0"
                         class="form-control"
                         placeholder="請輸入原價"
+                        v-model.number="tempProduct.origin_price"
                       />
                     </div>
                     <div class="mb-3 col-md-6">
@@ -156,6 +171,7 @@
                         min="0"
                         class="form-control"
                         placeholder="請輸入售價"
+                        v-model.number="tempProduct.price"
                       />
                     </div>
                   </div>
@@ -168,6 +184,7 @@
                       type="text"
                       class="form-control"
                       placeholder="請輸入產品描述"
+                      v-model="tempProduct.description"
                     >
                     </textarea>
                   </div>
@@ -178,6 +195,7 @@
                       type="text"
                       class="form-control"
                       placeholder="請輸入說明內容"
+                      v-model="tempProduct.content"
                     >
                     </textarea>
                   </div>
@@ -189,6 +207,7 @@
                         type="checkbox"
                         :true-value="1"
                         :false-value="0"
+                        v-model="tempProduct.is_enabled"
                       />
                       <label class="form-check-label" for="is_enabled"
                         >是否啟用</label
@@ -211,6 +230,7 @@
           </div>
         </div>
       </div>
+      <!-- 刪除Modal -->
       <div
         id="delProductModal"
         ref="delProductModal"
@@ -234,7 +254,8 @@
             </div>
             <div class="modal-body">
               是否刪除
-              <strong class="text-danger"></strong> 商品(刪除後將無法恢復)。
+              <strong class="text-danger">{{tempProduct.title}}</strong
+              >商品(刪除後將無法恢復)。
             </div>
             <div class="modal-footer">
               <button
